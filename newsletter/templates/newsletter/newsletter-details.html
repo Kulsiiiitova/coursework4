@@ -1,0 +1,66 @@
+{% extends 'newsletter/base.html' %}
+{% block title %}Информация о рассылке{% endblock %}
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Информация о рассылке</h1>
+    <p class="lead">{{newsletter.message}}</p>
+    <p class="lead">Начало работы: {{newsletter.start_time}}</p>
+    <p class="lead">Конец работы: {{newsletter.end_time}}</p>
+    <p class="lead">Пользователи: {{recipients_count}}</p>
+    <div class="container">
+        <div class="row text-center">
+            {% for recipient in recipients %}
+            <div class="col-3">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">{{recipient.email}}</h4>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <a href="{% url 'newsletter:newsletter_list' %}" class="btn btn-primary">Вернуться к главной странице</a>
+    {% if user.is_authenticated and newsletter.owner == user %}
+    <a href="{% url 'newsletter:newsletter_update' newsletter.pk %}" class="btn btn-primary">Редактировать</a>
+    <form method="post" action="{% url 'newsletter:send_newsletter' newsletter.pk %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary" onclick="return confirm('Запустить рассылку сейчас?')">
+            Отправить рассылку
+        </button>
+    </form>
+
+    <a href="{% url 'newsletter:newsletter_delete' newsletter.pk %}" class="btn btn-primary">Удалить рассылку</a>
+
+    {% if mailing_attempts %}
+    <div class="mt-4">
+        <h4>История отправок:</h4>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Время</th>
+                <th>Статус</th>
+                <th>Ответ сервера</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for attempt in mailing_attempts %}
+            <tr>
+                <td>{{ attempt.created_at|date:"d.m.Y H:i" }}</td>
+                <td>
+                    {% if attempt.status == 'success' %}
+                    <span class="badge bg-success">Успешно</span>
+                    {% else %}
+                    <span class="badge bg-danger">Неудачно</span>
+                    {% endif %}
+                </td>
+                <td>{{ attempt.server_response }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

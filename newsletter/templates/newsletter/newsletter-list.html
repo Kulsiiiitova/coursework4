@@ -1,0 +1,53 @@
+{% extends 'newsletter/base.html' %}
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+    <p class="lead"> Количество рассылок: {{newsletter_count}}</p>
+    <p class="lead"> Количество запущенных рассылок: {{newsletter_count_launched}}</p>
+    <p class="lead"> Общее число пользователей: {{count_users}}</p>
+
+<div class="container">
+    <div class="row text-center">
+        {% for newsletter in newsletters %}
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{newsletter.message}}</h4>
+                </div>
+                {% if user.is_authenticated %}
+                <a class="p-2 btn btn-outline-primary"
+                     href="{% url 'newsletter:newsletter_details' newsletter.pk %}">Посмотреть информацию</a>
+                {% endif %}
+
+
+            </div>
+        </div>
+        {% empty %}
+        <p>Нет доступных рассылок.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row text-center">
+        {% for message in messages %}
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{message.name_message}}</h4>
+                </div>
+                {% if user.is_authenticated and user == newsletter.owner %}
+                <a class="p-2 btn btn-outline-primary"
+                     href="{% url 'newsletter:message_details' message.pk %}">Посмотреть информацию</a>
+                {% endif %}
+
+
+            </div>
+        </div>
+        {% empty %}
+        <p>Нет доступных сообщений.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
