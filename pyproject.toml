@@ -1,0 +1,19 @@
+[project]
+name = "coursework4"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Kulsitova",email = "kulsitovakarina@gmail.com "}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django (>=5.2.8,<6.0.0)",
+    "load-dotenv (>=0.1.0,<0.2.0)",
+    "psycopg2-binary (>=2.9.11,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
