@@ -1,0 +1,13 @@
+{% extends 'newsletter/base.html' %}
+
+{% block title %}Удалить сообщение{% endblock %}
+
+{% block content %}
+<h2>Удалить сообщение</h2>
+<p>Вы уверены, что хотите удалить сообщение "{{message.name_message}}"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Удалить</button>
+    <a href="{% url 'newsletter:newsletter_list' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}
